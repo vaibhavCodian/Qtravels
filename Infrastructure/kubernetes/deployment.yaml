@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toursapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: toursapp
+  template:
+    metadata:
+      labels:
+        app: toursapp
+        version: v1
+    spec:
+      containers:
+      - name: toursapp
+        image: us-central1-docker.pkg.dev/vaibhav-training/myregistery/toursapp
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: password
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: db_name
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: db_host

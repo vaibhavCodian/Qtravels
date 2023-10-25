@@ -1,0 +1,24 @@
+<h4>Application Form</h4>
+<form action="/tour/{{tour['id']}}/book" method="post">
+  <div class="mb-2">
+  <label>Full Name</label><br>
+  <input type="text" required name="full_name" placeholder="Bruce Wayne">
+  </div>
+
+  <div class="mb-2">
+  <label>Email</label><br>
+  <input type="email" required name="email" placeholder="bruce@wayne.com">
+  </div>
+
+  <div class="mb-2">
+    <label>Contact Number</label><br>
+    <input type="tel" name="contact_number">
+    </div>
+
+  <div class="mb-2">
+  <label>Head Count</label><br>
+  <input type="number" name="head_count">
+  </div>
+
+  <input class="btn btn-primary" type="submit">
+</form>

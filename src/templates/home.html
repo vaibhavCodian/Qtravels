@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>qtravels</title>
+    {% include 'bootstrap.html' %}
+  </head>
+  <body>
+    {% include 'nav.html' %}
+    {% include 'banner.html' %}
+    <div class="container">
+      <h2 class="text-center mt-2 mb-4">
+        Your Odyssey, Our Expertise.
+      </h2>
+      <div class="row" style="margin-bottom:32px">
+        <div class="col-md-6">
+      <p class="lead">
+        At Q-Travel, our mission is to seamlessly blend innovation and expertise to redefine the world of tourism management. We strive to empower every traveler with unparalleled experiences, leveraging cutting-edge technology and data-driven insights. Our commitment is to create a global community of explorers by providing personalized. Join us in transforming travel into an extraordinary exploration of discovery and delight.
+      </p>
+        </div>
+        <div class="d-none d-md-block col-md-6">
+        <img src="/static/people.jpg" style="height:320px;border-radius:4px;">
+        </div>
+      </div>
+      <h2 class="text-center mt-2 mb-4">Upcomming Tours</h2>
+      <div>
+        {% for tour in tours %}
+          {% include 'tour_item.html' %}
+        {% endfor %}
+      </div>
+    </div>
+    {% include 'footer.html' %}
+  </body>
+</html>

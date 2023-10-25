@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{tour.tour_name}} - Jovian Careers</title>
+    {% include 'bootstrap.html' %}
+  </head>
+  <body>
+    {% include 'nav.html' %}
+    <style>
+      #banner {
+        height: 360px;
+        width: 100%;
+        object-fit:cover;
+        margin-bottom: 16px;
+      }
+    </style>
+    <img class="img-fluid" id="banner" src="https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" >
+    <div class="container">
+      <h1 class="text-center mt-2 mb-4">
+        QTravels
+      </h1>
+      <h3 class="mb-2">{{tour.tour_name}}</h3>
+      <p class="lead mt-0">{{tour.destination}}</p>
+      <h4>Tour Details</h4>
+      <ul>
+        {% for line in tour.details.split("\n") %}
+         <li>{{line}}</li> 
+        {% endfor %}
+      </ul>
+      <p>Start Date: {{tour.start_date}} <br> End Date: {{tour.end_date}}</p>
+      <b>max capacity: {{tour.max_capacity}}</b>
+      <hr>
+      {% include 'application_form.html' %}
+    </div>
+    {% include 'footer.html' %}
+  </body>
+</html>

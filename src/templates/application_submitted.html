@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Booking Submitted</title>  
+    {% include 'bootstrap.html' %}
+  </head>
+  <body>
+    {% include 'nav.html' %}
+    <style>
+      #banner {
+        height: 360px;
+        width: 100%;
+        object-fit:cover;
+        margin-bottom: 16px;
+      }
+    </style>
+    <img class="img-fluid" id="banner" src="https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" >
+
+    <div class="container">
+      <h1 class="text-center mt-2 mb-4">
+        Qtravels
+      </h1>
+
+      <p>Your application for the role of <b>{{tour['tour_name']}}</b> at Jovian has been submitted!</p>
+      
+      <b>Full Name</b>
+      <div class="mb-2">{{application['full_name']}}</div>
+  
+      <b>Email</b>
+      <div class="mb-2">{{application['email']}}</div>
+  
+      <b>LinkedIn URL</b>
+      <div class="mb-2">{{application['contact_number']}}</div>
+  
+      <b>Education</b>
+      <div class="mb-2">{{application['head_count']}}</div>
+    </div>
+    {% include 'footer.html' %}
+  </body>
+</html>
