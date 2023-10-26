@@ -2,8 +2,7 @@ pipeline {
     agent any
     
     environment {
-        // Define environment variables
-        GKE_CLUSTER = 'qtravel-cluster'
+        GKE_CLUSTER = 'cluster-1'
         GKE_ZONE = 'us-central1-c'
         GKE_NAMESPACE = 'your-namespace'
         GIT_REPO_URL = 'https://github.com/vaibhavCodian/Qtravels.git'
@@ -11,36 +10,18 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout code from Git
-                checkout([$class: 'GitSCM', branches: [[name: '*/your-branch-name']]])
-            }
-        }
+        // stage('Checkout') {
+        //     // steps {
+        //     //     // Checkout code from Git
+        //     //     checkout([$class: 'GitSCM', branches: [[name: '*/your-branch-name']]])
+        //     // }
+        // }
 
         stage('Build and Push Docker Image') {
             steps {
                 // Build Docker image
-                script {
-                    docker.build("your-docker-image-name")
-                }
-
-                // Tag Docker image for the artifact repository
-                script {
-                    docker.image("your-docker-image-name").tag("${ARTIFACT_REPO_URL}/your-docker-image-name")
-                }
-
-                // Login to the artifact repository
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'your-artifactory-credentials-id', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                        sh "docker login -u ${USERNAME} -p ${PASSWORD} ${ARTIFACT_REPO_URL}"
-                    }
-                }
-
-                // Push Docker image to artifact repository
-                script {
-                    docker.image("${ARTIFACT_REPO_URL}/your-docker-image-name").push()
-                }
+                sh "docker build -t us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp src/."
+                sh "docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp"
             }
         }
 
@@ -48,7 +29,7 @@ pipeline {
             steps {
                 // Authenticate with GKE
                 script {
-                    withCredentials([gcpServiceAccount('your-gcp-service-account-key-file.json')]) {
+                    withCredentials([gcpServiceAccount('crentials.json')]) {
                         sh "gcloud auth activate-service-account --key-file=${gcp_service_account_key_file}"
                         sh "gcloud container clusters get-credentials ${GKE_CLUSTER} --zone=${GKE_ZONE}"
                     }
