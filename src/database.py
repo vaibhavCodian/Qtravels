@@ -1,6 +1,7 @@
 import pymysql.cursors
 import os
 import base64
+import tempfile
 # from dotenv import load_dotenv
 
 # Load environment variables from the .env file
@@ -10,22 +11,25 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
 DB_HOST = os.getenv('DB_HOST')
-
-client_cert_base64 = os.getenv('CLIENT_CERT', '')
-client_key_base64 = os.getenv('CLIENT_KEY', '')
-server_ca_base64 = os.getenv('SERVER_CA', '')
-
-# Decode base64-encoded SSL certificates
-client_cert = base64.b64decode(client_cert_base64).decode('utf-8')
-client_key = base64.b64decode(client_key_base64).decode('utf-8')
-server_ca = base64.b64decode(server_ca_base64).decode('utf-8')
 DB_PORT = 3306
 
+client_cert = os.getenv('DB_SSL_CERT', '')
+client_key = os.getenv('DB_SSL_KEY', '')
+server_ca = os.getenv('DB_SSL_CA', '')
 
-print("db_name below")
-print(DB_NAME)
-print(client_cert_base64)
-print(client_cert)
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as client_cert_file:
+    client_cert_file.write(client_cert)
+    client_cert_file_path = client_cert_file.name
+
+with tempfile.NamedTemporaryFile(mode='w', delete=False ) as client_key_file:
+    client_key_file.write(client_key)
+    client_key_file_path = client_key_file.name
+
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as server_ca_file:
+    server_ca_file.write(server_ca)
+    server_ca_file_path = server_ca_file.name
+
+print()
 
 def create_connection():
     return pymysql.connect(
@@ -37,9 +41,9 @@ def create_connection():
         charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor,
         ssl={
-            'cert': client_cert,
-            'key': client_key,
-            'ca': server_ca,
+            'cert': client_cert_file_path,
+            'key': client_key_file_path,
+            'ca': server_ca_file_path,
             'check_hostname': False 
         }
     )

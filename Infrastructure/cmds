@@ -1,0 +1,8 @@
+
+gcloud container clusters get-credentials qtravel-cluster --zone us-central1-c --project qtravels-project
+
+docker build -t us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp src/.
+docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp
+
+kubectl apply -f Infrastructure/kubernetes/cloudsql-secrets.yaml
+kubectl apply -f Infrastructure/kubernetes/deployment.yaml

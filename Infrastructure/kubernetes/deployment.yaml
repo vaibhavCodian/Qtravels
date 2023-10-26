@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: toursapp
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: toursapp
@@ -11,11 +11,11 @@ spec:
     metadata:
       labels:
         app: toursapp
-        version: v1
+        version: v1.11
     spec:
       containers:
       - name: toursapp
-        image: us-central1-docker.pkg.dev/vaibhav-training/myregistery/toursapp
+        image: us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp
         ports:
         - containerPort: 8080
         env:
@@ -39,3 +39,18 @@ spec:
             secretKeyRef:
               name: cloudsql-credentials
               key: db_host
+        - name: DB_SSL_CERT
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: client-cert.pem
+        - name: DB_SSL_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: client-key.pem
+        - name: DB_SSL_CA
+          valueFrom:
+            secretKeyRef:
+              name: cloudsql-credentials
+              key: server-ca.pem
