@@ -1,5 +1,5 @@
 
-gcloud container clusters get-credentials qtravel-cluster --zone us-central1-c --project qtravels-project
+gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project qtravels-project
 
 docker build -t us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp src/.
 docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp
