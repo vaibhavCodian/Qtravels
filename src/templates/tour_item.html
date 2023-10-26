@@ -1,6 +1,6 @@
 <div class="border-bottom row" style="margin-bottom:16px;padding-bottom:8px;">
   <div class="col-2">
-    <img src="https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    <img src="{{tour['image_url']}}"
          alt="{{ tour['tour_name'] }}"
          style="width: 100%; height: auto;">
   </div>
@@ -17,4 +17,3 @@
   <div class="col-2 padding-right:16px">
     <a href="/tour/{{tour['id']}}" type="button" class="btn btn-outline-primary float-right align-middle" >Book Tour</a>
   </div>
-</div>

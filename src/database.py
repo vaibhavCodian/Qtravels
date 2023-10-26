@@ -1,18 +1,30 @@
 import pymysql.cursors
 import os
-from dotenv import load_dotenv
+import base64
+# from dotenv import load_dotenv
 
 # Load environment variables from the .env file
-load_dotenv()
+# load_dotenv()
 
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
 DB_HOST = os.getenv('DB_HOST')
+
+client_cert_base64 = os.getenv('CLIENT_CERT', '')
+client_key_base64 = os.getenv('CLIENT_KEY', '')
+server_ca_base64 = os.getenv('SERVER_CA', '')
+
+# Decode base64-encoded SSL certificates
+client_cert = base64.b64decode(client_cert_base64).decode('utf-8')
+client_key = base64.b64decode(client_key_base64).decode('utf-8')
+server_ca = base64.b64decode(server_ca_base64).decode('utf-8')
 DB_PORT = 3306
+
 
 print("db_name below")
 print(DB_NAME)
+print()
 
 def create_connection():
     return pymysql.connect(
@@ -22,7 +34,13 @@ def create_connection():
         database=DB_NAME,
         port=DB_PORT,
         charset='utf8mb4',
-        cursorclass=pymysql.cursors.DictCursor
+        cursorclass=pymysql.cursors.DictCursor,
+        ssl={
+            'cert': client_cert,
+            'key': client_key,
+            'ca': server_ca,
+            'check_hostname': False 
+        }
     )
 
 def table_exists(table_name, connection):
@@ -126,3 +144,16 @@ def add_booking_to_db(tour_id, data):
         print(f"An error occurred: {e}")
 
 
+# Insert
+# INSERT INTO tours (tour_name, destination, start_date, end_date, max_capacity, details, image_url)
+# VALUES
+#     ('Sacred Kedarnath Pilgrimage', 'Kedarnath, Uttarakhand', '2023-11-01', '2023-11-07', 50, 'Embark on a spiritual journey to the holy Kedarnath Temple nestled in the Himalayas.', 'https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
+#     ('Vrindavan Spiritual Retreat', 'Vrindavan, Uttar Pradesh', '2023-12-01', '2023-12-10', 30, 'Experience the divine atmosphere of Vrindavan and connect with your spiritual self.', 'https://media.gettyimages.com/id/1247805327/photo/hindu-devotees-are-seen-throwing-colourful-powders-inside-radhaballav-temple-of-vrindavan.jpg?s=612x612&w=0&k=20&c=jPIM1QrZGlaghjvgMFGjdQA-QJe1JFGOqMtG0JT9Xd0='),
+#     ('Kaichi Dham Meditation Expedition', 'Dehradun, Uttarakhand', '2024-01-15', '2024-01-21', 20, 'Discover peace and tranquility in the serene surroundings of Kaichi Dham in Dehradun.', 'https://th.bing.com/th/id/OIP.8Sy5DXYuDmuYlPP03757fgHaDf?pid=ImgDet&rs=1'),
+#     ('Divine Kedarnath Yatra', 'Kedarnath, Uttarakhand', '2024-02-10', '2024-02-17', 40, 'Join this sacred journey to Kedarnath and experience the profound spirituality of the region.', 'https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
+#     ('Spiritual Bliss in Vrindavan', 'Vrindavan, Uttar Pradesh', '2024-03-05', '2024-03-12', 25, 'Immerse yourself in the blissful atmosphere of Vrindavan and explore its sacred sites.', 'https://th.bing.com/th?id=OSK.HERO3LZ_AT5NZt9G1v5-62SpTUETdqTNd4x-sKtEQLnKTk4&w=472&h=280&c=1&rs=2&o=6&pid=SANGAM'),
+#     ('Kaichi Dham Yoga Retreat', 'Dehradun, Uttarakhand', '2024-04-02', '2024-04-09', 35, 'Rejuvenate your mind and body with yoga and meditation in the scenic beauty of Kaichi Dham.', 'https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
+#     ('Kedarnath Spiritual Sojourn', 'Kedarnath, Uttarakhand', '2024-05-10', '2024-05-17', 30, 'Experience the spiritual essence of Kedarnath through meditation and introspection.', 'https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
+#     ('Vrindavan Cultural Expedition', 'Vrindavan, Uttar Pradesh', '2024-06-01', '2024-06-07', 40, 'Explore the rich cultural heritage of Vrindavan through this enlightening cultural expedition.', 'https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'),
+#     ('Kaichi Dham Nature Retreat', 'Dehradun, Uttarakhand', '2024-07-15', '2024-07-22', 28, 'Connect with nature and spirituality in the tranquil environment of Kaichi Dham.', 'kaichi_dham_nature_image'),
+#     ('Kedarnath Adventure and Pilgrimage', 'Kedarnath, Uttarakhand', '2024-08-10', '2024-08-17', 25, 'Combine adventure with spirituality on this unique journey to Kedarnath.', 'https://images.pexels.com/photos/11305767/pexels-photo-11305767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
