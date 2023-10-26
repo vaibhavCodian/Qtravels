@@ -24,7 +24,8 @@ DB_PORT = 3306
 
 print("db_name below")
 print(DB_NAME)
-print()
+print(client_cert_base64)
+print(client_cert)
 
 def create_connection():
     return pymysql.connect(
