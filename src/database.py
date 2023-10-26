@@ -78,7 +78,6 @@ def create_tables(connection):
                 email VARCHAR(255) NOT NULL,
                 contact_number VARCHAR(20) NOT NULL,
                 head_count INT NOT NULL,
-                -- Add other columns as needed
                 FOREIGN KEY (tour_id) REFERENCES tours(id)
             )
         """)

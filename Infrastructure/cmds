@@ -6,3 +6,7 @@ docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp
 
 kubectl apply -f Infrastructure/kubernetes/cloudsql-secrets.yaml
 kubectl apply -f Infrastructure/kubernetes/deployment.yaml
+kubectl apply -f Infrastructure/kubernetes/service.yaml
+
+
+kubectl set image deployment/toursapp toursapp=us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp
