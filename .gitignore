@@ -1,0 +1,4 @@
+.env
+Infrastructure/kubernetes/cloudsql-secrets.yaml
+*.pem
+credentials.json
