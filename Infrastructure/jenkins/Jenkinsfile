@@ -2,44 +2,45 @@ pipeline {
     agent any
     
     environment {
-        GKE_CLUSTER = 'cluster-1'
-        GKE_ZONE = 'us-central1-c'
-        GKE_NAMESPACE = 'your-namespace'
-        GIT_REPO_URL = 'https://github.com/vaibhavCodian/Qtravels.git'
-        ARTIFACT_REPO_URL = 'your-artifact-repo-url'
+        CLOUDSDK_CORE_PROJECT = 'qtravels-project' 
+        GCLOUD_CREDS=credentials('gcloud-creds')
     }
 
     stages {
-        // stage('Checkout') {
-        //     // steps {
-        //     //     // Checkout code from Git
-        //     //     checkout([$class: 'GitSCM', branches: [[name: '*/your-branch-name']]])
-        //     // }
-        // }
-
-        stage('Build and Push Docker Image') {
+        stage('Git Checkout') {
             steps {
-                // Build Docker image
-                sh "docker build -t us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp src/."
-                sh "docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp"
+                echo 'Git Checkout running...'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'f4fd4dfa-abf1-4897-870b-06da293809bb', url: 'https://github.com/vaibhavCodian/Qtravels.git']])
             }
         }
-
-        stage('Deploy to GKE') {
+        stage('Docker Build and Push') {
             steps {
-                // Authenticate with GKE
-                script {
-                    withCredentials([gcpServiceAccount('crentials.json')]) {
-                        sh "gcloud auth activate-service-account --key-file=${gcp_service_account_key_file}"
-                        sh "gcloud container clusters get-credentials ${GKE_CLUSTER} --zone=${GKE_ZONE}"
-                    }
-                }
+                
+                sh '''
+                    gcloud version
+                    gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
+                    gcloud artifacts repositories list
+                '''
 
-                // Deploy to GKE using kubectl
-                script {
-                    sh "kubectl apply -f deployment.yml -n ${GKE_NAMESPACE}"
-                    sh "kubectl apply -f service.yml -n ${GKE_NAMESPACE}"
+                withCredentials([file(credentialsId: 'gcloud-creds', variable: 'gcc')]) {
+                    sh '''
+                        gcloud auth configure-docker \
+    us-central1-docker.pkg.dev --quiet
+                    '''
+                    
+                    
+                    sh 'docker build -t us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp src/.'
+                    sh 'docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp'
                 }
+    
+            }
+        }
+        stage('GKE Build') {
+            steps {
+                withCredentials([file(credentialsId: 'gcloud-creds', variable: 'gcc')]) {
+                    sh 'kubectl rollout restart deployment toursapp'
+                }
+    
             }
         }
     }
