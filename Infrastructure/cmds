@@ -10,3 +10,6 @@ kubectl apply -f Infrastructure/kubernetes/service.yaml
 
 
 kubectl set image deployment/toursapp toursapp=us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp
+
+
+kubectl config current-context
