@@ -4,12 +4,6 @@ from database import load_tours_from_db, load_tour_from_db, add_booking_to_db
 app = Flask(__name__)
 
 
-# @app.route("/")
-# def Home():
-#   tours = load_from_db()
-#   print(tours)
-#   return render_template("index.html", records=tours)
-
 @app.route("/")
 def Home():
   tours = load_tours_from_db()
