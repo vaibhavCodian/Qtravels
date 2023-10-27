@@ -29,8 +29,8 @@ pipeline {
                     '''
                     
                     
-                    sh 'docker build -t us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp src/.'
-                    sh 'docker push us-central1-docker.pkg.dev/qtravels-project/myregistry/toursapp'
+                    sh 'docker build -t gcr.io/qtravels-project/myregistry/toursapp src/.'
+                    sh 'docker push gcr.io/qtravels-project/qtravels-project/myregistry/toursapp'
                 }
     
             }
@@ -38,8 +38,6 @@ pipeline {
         stage('GKE Build') {
             steps {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'gcc')]) {
-                    sh 'gcloud components install gke-gcloud-auth-plugin'
-                    sh 'gcloud components install gke-gcloud-auth-plugin'
                     sh 'gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project qtravels-project'
                     sh 'kubectl get pods'
                     sh 'kubectl get services'
