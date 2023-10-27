@@ -16,7 +16,7 @@ def Home():
   print(tours)
   return render_template('home.html', 
                          tours=tours)
-# sdf
+# sdf test
 @app.route("/tour/<id>")
 def show_tour(id):
   tour = load_tour_from_db(id)
