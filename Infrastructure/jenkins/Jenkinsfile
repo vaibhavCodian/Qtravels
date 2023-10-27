@@ -2,15 +2,15 @@ pipeline {
     agent any
     
     environment {
-        CLOUDSDK_CORE_PROJECT = 'qtravels-project' 
-        GCLOUD_CREDS=credentials('gcloud-creds')
+        CLOUDSDK_CORE_PROJECT = 'qtravels-project'
+        GCLOUD_CREDS=credentials('gcp_cred')
     }
 
     stages {
         stage('Git Checkout') {
             steps {
                 echo 'Git Checkout running...'
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'f4fd4dfa-abf1-4897-870b-06da293809bb', url: 'https://github.com/vaibhavCodian/Qtravels.git']])
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'git_cred', url: 'https://github.com/vaibhavCodian/Qtravels.git']])
             }
         }
         stage('Docker Build and Push') {
@@ -18,11 +18,11 @@ pipeline {
                 
                 sh '''
                     gcloud version
-                    gcloud auth activate-service-account --key-file="$GCLOUD_CREDS"
+                    gcloud auth activate-service-account --key-file="${GCLOUD_CREDS}"
                     gcloud artifacts repositories list
                 '''
 
-                withCredentials([file(credentialsId: 'gcloud-creds', variable: 'gcc')]) {
+                withCredentials([file(credentialsId: 'gcp_cred', variable: 'GCP_CRED')]) {
                     sh '''
                         gcloud auth configure-docker \
     us-central1-docker.pkg.dev --quiet
@@ -37,7 +37,7 @@ pipeline {
         }
         stage('GKE Build') {
             steps {
-                withCredentials([file(credentialsId: 'gcloud-creds', variable: 'gcc')]) {
+                withCredentials([file(credentialsId: 'gcp_cred', variable: 'GCP_CRED')]) {
                     sh 'gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project qtravels-project'
                     sh 'kubectl get pods'
                     sh 'kubectl get services'
