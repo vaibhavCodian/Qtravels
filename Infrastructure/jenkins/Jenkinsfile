@@ -30,6 +30,7 @@ pipeline {
                     
                     
                     sh 'docker build -t gcr.io/qtravels-project/myregistry/toursapp src/.'
+                    sh 'docker tag toursapp gcr.io/qtravels-project/myregistry/toursapp'
                     sh 'docker push gcr.io/qtravels-project/qtravels-project/myregistry/toursapp'
                 }
     
