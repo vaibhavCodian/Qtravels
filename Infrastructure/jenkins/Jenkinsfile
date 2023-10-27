@@ -38,7 +38,6 @@ pipeline {
         stage('GKE Build') {
             steps {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'gcc')]) {
-                    sh 'gcloud components install gke-gcloud-auth-plugin'
                     sh 'gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project qtravels-project'
                     sh 'kubectl get pods'
                     sh 'kubectl get services'
