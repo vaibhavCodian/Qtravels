@@ -11,7 +11,7 @@ spec:
     metadata:
       labels:
         app: toursapp
-        version: v1.11
+        version: v1.1
     spec:
       containers:
       - name: toursapp
