@@ -29,10 +29,6 @@ with tempfile.NamedTemporaryFile(mode='w', delete=False) as server_ca_file:
     server_ca_file.write(server_ca)
     server_ca_file_path = server_ca_file.name
 
-print(DB_HOST)
-print(DB_PASSWORD)
-print(client_key)
-print(server_ca)
 
 def create_connection():
     return pymysql.connect(
@@ -43,12 +39,12 @@ def create_connection():
         port=DB_PORT,
         charset='utf8mb4',
         cursorclass=pymysql.cursors.DictCursor,
-        ssl={
-            'cert': client_cert_file_path,
-            'key': client_key_file_path,
-            'ca': server_ca_file_path,
-            'check_hostname': False 
-        }
+        # ssl={
+        #     'cert': client_cert_file_path,
+        #     'key': client_key_file_path,
+        #     'ca': server_ca_file_path,
+        #     'check_hostname': False 
+        # }
     )
 
 def table_exists(table_name, connection):
