@@ -29,8 +29,10 @@ with tempfile.NamedTemporaryFile(mode='w', delete=False) as server_ca_file:
     server_ca_file.write(server_ca)
     server_ca_file_path = server_ca_file.name
 
-print("new")
 print(DB_HOST)
+print(client_cert)
+print(client_key)
+print(server_ca)
 
 def create_connection():
     return pymysql.connect(
