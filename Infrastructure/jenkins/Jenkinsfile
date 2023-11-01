@@ -38,7 +38,7 @@ pipeline {
         stage('GKE Build') {
             steps {
                 withCredentials([file(credentialsId: 'gcp_cred', variable: 'GCP_CRED')]) {
-                    sh 'gcloud container clusters get-credentials cluster-1 --zone us-central1-c --project qtravels-project'
+                    sh 'gcloud container clusters get-credentials cluster --zone us-central1-c --project qtravels-project'
                     sh 'kubectl apply -f Infrastructure/kubernetes/deployment.yaml'
                     sh 'kubectl apply -f Infrastructure/kubernetes/service.yaml' 
                     sh 'kubectl get pods'
